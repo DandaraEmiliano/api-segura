@@ -2,7 +2,7 @@ package com.dandaraemiliano.api_segura.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class LoginRequest {
+public class RegisterRequest {
     @NotBlank(message = "O nome de usuário é obrigatório")
     private String username;
     @NotBlank(message = "A senha é obrigatória")
@@ -13,4 +13,4 @@ public class LoginRequest {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
-}
+} 
