@@ -34,3 +34,6 @@ build/
 
 # Ignorar configuração local
 src/main/resources/application.properties
+
+# Arquivo de propriedades sensível
+src/main/resources/application.properties

@@ -1,7 +1,7 @@
 package com.dandaraemiliano.api_segura.controller;
 
-import com.dandaraemiliano.api_segura.model.User;
-import com.dandaraemiliano.api_segura.repository.UserRepository;
+import com.dandaraemiliano.api_segura.service.UserService;
+import com.dandaraemiliano.api_segura.dto.UserResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,17 +11,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/usuarios")
 public class UserController {
 
-    private final UserRepository repository;
+    private final UserService userService;
 
-    public UserController(UserRepository repository) {
-        this.repository = repository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/me")
-    public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
-        User user = repository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserResponse> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(userService.buscarUsuarioAtualResponse(userDetails));
     }
 }
