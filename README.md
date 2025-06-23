@@ -1,113 +1,132 @@
-# 🔐 API Segura
+# API Segura
 
-Este projeto é uma API RESTful em Java com Spring Boot que implementa autenticação baseada em JWT (JSON Web Token), utilizando Spring Security. Ele serve como base para sistemas que precisam proteger endpoints com tokens e seguir boas práticas de segurança em APIs.
+API REST em Java com Spring Boot, autenticação JWT e boas práticas de segurança.
 
----
+## Visão Geral
 
-## 🧰 Tecnologias
+Esta API demonstra uma arquitetura limpa, autenticação segura com JWT, validação de dados, tratamento global de exceções e documentação automática com Swagger.
 
+## Funcionalidades
+- Cadastro e autenticação de usuários
+- Proteção de endpoints com JWT
+- Retorno de dados do usuário autenticado
+- Validação de dados de entrada
+- Tratamento padronizado de erros
+- Documentação interativa via Swagger
+
+## Tecnologias Utilizadas
 - Java 17
-- Spring Boot 3.5.0
+- Spring Boot 3.x
 - Spring Security
 - Spring Data JPA
 - PostgreSQL
-- Maven
-- JWT (jjwt)
-- BCrypt
+- JWT (JSON Web Token)
+- Swagger (springdoc-openapi)
+- JUnit & Mockito (testes)
 
----
+## Requisitos
+- Java 17+
+- Maven 3.8+
+- PostgreSQL
 
-## 📌 Funcionalidades
+## Configuração
 
-- Registro e autenticação de usuários
-- Geração de token JWT ao autenticar
-- Proteção de endpoints com autenticação via token
-- Filtro customizado `JwtAuthFilter` para validar tokens em todas as requisições
-- Controle de acesso baseado em roles
+1. **Clone o repositório:**
+   ```bash
+   git clone https://github.com/seu-usuario/api-segura.git
+   cd api-segura
+   ```
 
----
+2. **Configure o banco de dados:**
+   - Crie um banco PostgreSQL chamado `apisegura`.
+   - Crie um usuário e senha para acesso.
 
-## 📁 Estrutura de pacotes
+3. **Crie o arquivo de propriedades:**
+   - Copie o arquivo de exemplo:
+     ```bash
+     cp src/main/resources/application-example.properties src/main/resources/application.properties
+     ```
+   - Edite `src/main/resources/application.properties` com seus dados reais:
+     ```properties
+     spring.datasource.url=jdbc:postgresql://localhost:5432/apisegura
+     spring.datasource.username=SEU_USUARIO
+     spring.datasource.password=SUA_SENHA
+     jwt.secret=SUA_CHAVE_SECRETA
+     ```
 
-```
-com.dandaraemiliano.api_segura
-├── config         
-├── controller    
-├── dto            
-├── model          
-├── repository     
-├── util          
-└── ApiSeguraApplication.java
-```
+4. **Instale as dependências:**
+   ```bash
+   ./mvnw clean install
+   ```
 
----
-
-## 🛠️ Como rodar
-
-1. Configure o banco de dados PostgreSQL com:
-
-```sql
-CREATE DATABASE apisegura;
-CREATE USER seu_usuario WITH PASSWORD 'sua_senha';
-```
-
-2. Altere `application.properties` com suas credenciais:
-
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/apisegura
-spring.datasource.username=seu_usuario
-spring.datasource.password=sua_senha
-spring.jpa.hibernate.ddl-auto=update
-```
-
-3. Rode o projeto:
+## Executando a Aplicação
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
----
+Acesse a API em: `http://localhost:8080`
 
-## 🔐 Exemplo de autenticação (login)
+## Documentação Swagger
 
-### Requisição
-```http
-POST /auth/login
-Content-Type: application/json
+Acesse a documentação interativa em:
+- [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+- ou [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 
-{
-  "username": "seu_usuario",
-  "password": "sua_senha"
-}
-```
+## Endpoints Principais
 
-### Resposta
+- `POST /auth/register` — Cadastro de usuário
+- `POST /auth/login` — Autenticação (retorna JWT)
+- `GET /usuarios/me` — Dados do usuário autenticado (JWT obrigatório)
+
+## Exemplos de Uso
+
+### Cadastro de Usuário
+**POST** `/auth/register`
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiJ9..."
+  "username": "maria",
+  "password": "SenhaForte123"
 }
 ```
 
----
-
-## 🧪 Endpoint protegido
-
-### Requisição
-
-```http
-GET /usuarios/me
-Authorization: Bearer <token>
+### Login
+**POST** `/auth/login`
+```json
+{
+  "username": "maria",
+  "password": "SenhaForte123"
+}
+```
+**Resposta:**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
+}
 ```
 
----
+### Endpoint Protegido
+**GET** `/usuarios/me`
+- Header: `Authorization: Bearer SEU_TOKEN_AQUI`
 
-## 👩🏻‍💻 Autora
+## Testes
 
-**Dandara Emiliano**  
-[GitHub](https://github.com/DandaraEmiliano) · [LinkedIn](https://linkedin.com/in/dandaraemiliano)
+Execute os testes automatizados com:
+```bash
+./mvnw test
+```
 
----
+## Segurança
+- Nunca versionar o arquivo `application.properties` (já está no `.gitignore`).
+- Nunca compartilhe sua chave JWT ou senha do banco.
+- Use variáveis de ambiente ou secrets em produção.
 
-## 📄 Licença
+## Boas Práticas
+- Utilize DTOs para entrada e saída de dados.
+- Centralize regras de negócio em serviços.
+- Trate exceções de forma global.
+- Valide todos os dados de entrada.
+- Documente e teste sua API.
 
-Projeto sob licença MIT.
+## Licença
+[MIT](LICENSE)
